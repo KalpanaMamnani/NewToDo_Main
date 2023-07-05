@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: kalpanamamnani/NewToDo_Main
+  IMAGE_NAME: kalpanamamnani/newtodo_main
   IMAGE_TAG: 1.0.${{ github.run_number }}
 
 jobs:
