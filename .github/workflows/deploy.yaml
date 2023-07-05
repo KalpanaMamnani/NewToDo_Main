@@ -1,28 +1,36 @@
 name: Deploy to Minikube using GitHub Actions
 
-on: [push]
-  
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  job1:
+  build-deploy:
     runs-on: ubuntu-latest
-    name: build Docker Image and deploy to minikube
+    name: Build Docker Image and deploy to Minikube
     steps:
-    - uses: actions/checkout@v2
-    - name: Start minikube
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Start Minikube
       uses: medyagh/setup-minikube@master
-    - name: Try the cluster !
+      
+    - name: List pods in the cluster
       run: kubectl get pods -A
-    - name: Build image
+      
+    - name: Build Docker image
       run: |
-          export SHELL=/bin/bash
-          eval $(minikube -p minikube docker-env)
-          docker build -f ./Dockerfile -t kalpanamamnani/todo_app:latest .
-          echo -n "verifying images:"
-          docker images         
-    - name: Deploy to minikube
-      run:
-        kubectl apply -f k8-deploy.yaml
+        export SHELL=/bin/bash
+        eval $(minikube -p minikube docker-env)
+        docker build -f Dockerfile -t kalpanamamnani/todo_app:latest .
+        echo "Verifying images:"
+        docker images
+        
+    - name: Deploy to Minikube
+      run: kubectl apply -f k8-deploy.yaml
+      
     - name: Test service URLs
       run: |
-          minikube service list
-          minikube service nginx-app --url
+        minikube service list
+        minikube service nginx-app --url
