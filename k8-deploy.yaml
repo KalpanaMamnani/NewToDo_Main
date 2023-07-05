@@ -5,7 +5,7 @@ metadata:
   name: todoapp
   namespace: default
   labels:
-    app: todoaapp
+    app: todoapp
 spec:
   replicas: 1
   selector:
@@ -18,9 +18,15 @@ spec:
     spec:
       containers:
       - name: todoapp
-        image: "ghcr.io/kalpanamamnani/my-web-app:latest"
+        image: "nginx:alpine"
         ports:
           - containerPort: 80
+        volumeMounts:
+          - name: html-volume
+            mountPath: /usr/share/nginx/html
+  volumes:
+    - name: html-volume
+      emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -33,5 +39,5 @@ spec:
   type: NodePort
   ports:
   - name: http
-    targetPort: 8080
+    targetPort: 80
     port: 80
