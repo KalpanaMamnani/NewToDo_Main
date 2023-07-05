@@ -33,4 +33,4 @@ jobs:
     - name: Test service URLs
       run: |
         minikube service list
-        minikube service nginx-app --url
+        minikube service nginx-service --url
